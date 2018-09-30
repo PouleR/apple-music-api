@@ -26,7 +26,8 @@
         "php-http/httplug": "^1.0",
         "php-http/message-factory": "^1.0",
         "php-http/curl-client": "^1.7",
-        "php-http/client-common": "^1.0"
+        "php-http/client-common": "^1.0",
+        "spomky-labs/jose": "^7.1"
     },
     "autoload": {
         "psr-4": {
