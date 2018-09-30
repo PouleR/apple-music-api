@@ -8,7 +8,7 @@ use Jose\Factory\JWSFactory;
 /**
  * Class AppleMusicAPITokenGenerator
  */
-class AppleMusicAPITokenGenerator
+final class AppleMusicAPITokenGenerator
 {
     const TOKEN_TYPE = 'JWT';
     const TOKEN_ALG = 'ES256';
@@ -21,7 +21,7 @@ class AppleMusicAPITokenGenerator
      *
      * @return string
      */
-    static public function generateToken($teamId, $keyId, $keyFile, $expiration = 30)
+    public static function generateToken($teamId, $keyId, $keyFile, $expiration = 30)
     {
         $payload = [
             'iss' => $teamId,
