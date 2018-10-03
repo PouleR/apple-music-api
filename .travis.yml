@@ -1,0 +1,34 @@
+sudo: false
+dist: trusty
+
+language: php
+
+php:
+  - 7.1
+  - 7.0
+  - nightly
+
+git:
+  depth: 1
+
+branches:
+  only:
+    - master
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    php: nightly
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer install --prefer-dist --no-interaction
+
+script:
+  - mkdir -p build/logs
+  - vendor/bin/phpcs src -v --standard=PSR2
+  - vendor/bin/phpunit
