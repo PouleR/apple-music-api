@@ -50,7 +50,8 @@ class AppleMusicAPI
      *
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param array  $types The possible values are albums, songs, and music-videos
-     * @param int    $limit The number of resources to include per chart. The default value is 20 and the maximum value is 50.
+     * @param int    $limit The number of resources to include per chart.
+     *                      The default value is 20 and the maximum value is 50.
      *
      * @return object
      *

@@ -98,7 +98,8 @@ class APIClient
             );
         } catch (\Exception | \Http\Client\Exception $exception) {
             throw new AppleMusicAPIException(
-                sprintf('API Request: %s, %s (%s)',
+                sprintf(
+                    'API Request: %s, %s (%s)',
                     $service,
                     $exception->getMessage(),
                     $exception->getCode()
