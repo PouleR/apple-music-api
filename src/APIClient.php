@@ -103,7 +103,8 @@ class APIClient
                     $service,
                     $exception->getMessage(),
                     $exception->getCode()
-                )
+                ),
+                $exception->getCode()
             );
         }
 
