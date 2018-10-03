@@ -85,4 +85,58 @@ class AppleMusicAPI
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
+
+    /**
+     * Fetch an album by using its identifier.
+     * https://developer.apple.com/documentation/applemusicapi/get_a_catalog_album
+     *
+     * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
+     * @param string $albumId The unique identifier for the album.
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getCatalogAlbum($storefront, $albumId)
+    {
+        $requestUrl = sprintf('catalog/%s/albums/%s', $storefront, $albumId);
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
+
+    /**
+     * Fetch a song by using its identifier.
+     * https://developer.apple.com/documentation/applemusicapi/get_a_catalog_song
+     *
+     * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
+     * @param string $songId The unique identifier for the song.
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getCatalogSong($storefront, $songId)
+    {
+        $requestUrl = sprintf('catalog/%s/songs/%s', $storefront, $songId);
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
+
+    /**
+     * Fetch an artist by using the artist's identifier.
+     * https://developer.apple.com/documentation/applemusicapi/get_a_catalog_artist
+     *
+     * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
+     * @param string $artistId The unique identifier for the artist.
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getCatalogArtist($storefront, $artistId)
+    {
+        $requestUrl = sprintf('catalog/%s/artists/%s', $storefront, $artistId);
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
 }
