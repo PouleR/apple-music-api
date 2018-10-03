@@ -1,3 +1,6 @@
+[![Packagist](https://img.shields.io/packagist/v/pouler/apple-music-api.svg)](https://packagist.org/packages/pouler/apple-music-api)
+[![Build Status](https://travis-ci.org/PouleR/apple-music-api.svg?branch=master)](https://travis-ci.org/PouleR/apple-music-api)
+
 # Apple Music API PHP
 
 This is a PHP wrapper for the [Apple Music API](https://developer.apple.com/documentation/applemusicapi).
