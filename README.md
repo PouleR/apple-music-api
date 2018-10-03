@@ -38,10 +38,18 @@ Before using the Apple Music API, you need to sign up for the Apple Developer Pr
 
 require 'vendor/autoload.php';
 
+$jwtToken = PouleR\AppleMusicAPI\AppleMusicAPITokenGenerator::generateToken(
+    'team.id',
+    'key.id',
+    'authkey.p8'
+);
+
 $client = new PouleR\AppleMusicAPI\APIClient();
-$client->setDeveloperToken('...');
+$client->setDeveloperToken($jwtToken);
 
 $api = new PouleR\AppleMusicAPI\AppleMusicAPI($client);
 
 $result = $api->getCatalogPlaylist('nl', 'pl.a56541661a7a4cca95ddeca24e5e5316');
+
+print_r($result);
 ```
