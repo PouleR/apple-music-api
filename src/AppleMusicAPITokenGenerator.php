@@ -10,33 +10,42 @@ use Jose\Factory\JWSFactory;
  */
 final class AppleMusicAPITokenGenerator
 {
-    const TOKEN_TYPE = 'JWT';
-    const TOKEN_ALG = 'ES256';
+    public const MAX_EXP_DAYS = 30;
+    private const TOKEN_TYPE = 'JWT';
+    private const TOKEN_ALG = 'ES256';
 
     /**
      * @param string $teamId
      * @param string $keyId
      * @param string $keyFile
-     * @param int    $expiration
+     * @param int    $expirationDays
      *
-     * @return string
+     * @return null|string
      */
-    public static function generateToken($teamId, $keyId, $keyFile, $expiration = 30)
+    public static function generateDeveloperToken($teamId, $keyId, $keyFile, $expirationDays = self::MAX_EXP_DAYS)
     {
+        $time = time();
+
         $payload = [
+            'iat' => $time,
+            'exp' => $time + (max($expirationDays, self::MAX_EXP_DAYS) * 86400),
             'iss' => $teamId,
-            'exp' => time() + ($expiration * 86400),
-            'ait' => time(),
         ];
 
         $headers = [
             'alg' => self::TOKEN_ALG,
-            'type' => self::TOKEN_TYPE,
-            'kid' => $keyId
+            'typ' => self::TOKEN_TYPE,
+            'kid' => $keyId,
         ];
 
-        $key = JWKFactory::createFromKeyFile($keyFile);
+        try {
+            $key = JWKFactory::createFromKeyFile($keyFile);
 
-        return JWSFactory::createJWSToCompactJSON($payload, $key, $headers);
+            return JWSFactory::createJWSToCompactJSON($payload, $key, $headers);
+        } catch (\Exception $exception) {
+
+        }
+
+        return null;
     }
 }
