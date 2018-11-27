@@ -43,7 +43,7 @@ final class AppleMusicAPITokenGenerator
 
             return JWSFactory::createJWSToCompactJSON($payload, $key, $headers);
         } catch (\Exception $exception) {
-
+            //Ignore
         }
 
         return null;
