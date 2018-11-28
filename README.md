@@ -41,10 +41,10 @@ Before using the Apple Music API, you need to sign up for the Apple Developer Pr
 
 require 'vendor/autoload.php';
 
-$jwtToken = PouleR\AppleMusicAPI\AppleMusicAPITokenGenerator::generateToken(
+$jwtToken = PouleR\AppleMusicAPI\AppleMusicAPITokenGenerator::generateDeveloperToken(
     'team.id',
     'key.id',
-    'authkey.p8'
+    '/path/to/authkey.p8'
 );
 
 $client = new PouleR\AppleMusicAPI\APIClient();

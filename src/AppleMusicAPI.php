@@ -2,6 +2,8 @@
 
 namespace PouleR\AppleMusicAPI;
 
+use PouleR\AppleMusicAPI\Request\LibraryPlaylistCreationRequest;
+
 /**
  * Class AppleMusicAPI
  */
@@ -139,5 +141,98 @@ class AppleMusicAPI
         $requestUrl = sprintf('catalog/%s/artists/%s', $storefront, $artistId);
 
         return $this->client->apiRequest('GET', $requestUrl);
+    }
+
+    /**
+     * Fetch a user’s storefront.
+     * https://developer.apple.com/documentation/applemusicapi/get_a_user_s_storefront
+     *     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getUsersStorefront()
+    {
+        return $this->client->apiRequest('GET', 'me/storefront');
+    }
+
+    /**
+     * Fetch the recently played resources for the user.
+     * https://developer.apple.com/documentation/applemusicapi/get_recently_played_resources
+     *     *
+     * @param int $limit The limit on the number of objects, or number of objects in the specified relationship,
+     *                   that are returned.
+     * @param int $offset The next page or group of objects to fetch.
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getRecentlyPlayedResources($limit = 5, $offset = 0)
+    {
+        $queryString = http_build_query([
+            'offset' => $offset,
+            'limit' => min($limit, 10),
+        ]);
+
+        $requestUrl = sprintf('me/recent/played?%s', $queryString);
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
+
+    /**
+     * Add a catalog resource to a user’s iCloud Music Library.
+     * https://developer.apple.com/documentation/applemusicapi/add_a_resource_to_a_library
+     *
+     * @param array $ids The unique catalog identifiers for the resources.
+     *                   To indicate the type of resource to be added, ids must be followed
+     *                   by one of the allowed values.
+     *                   Multiple types can be added in the same request.
+     *                   Possible values: albums, music-videos, playlists, songs
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function addResourceToLibrary($ids)
+    {
+        $queryString = http_build_query([
+            'ids' => $ids,
+        ]);
+
+        $requestUrl = sprintf('me/library?%s', urldecode($queryString));
+
+        return $this->client->apiRequest('POST', $requestUrl, [], ' ');
+    }
+
+    /**
+     * @param LibraryPlaylistCreationRequest $playlist
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function createLibraryPlaylist(LibraryPlaylistCreationRequest $playlist)
+    {
+        $requestBody['attributes'] = [
+            'name' => $playlist->getName(),
+            'description' => $playlist->getDescription(),
+        ];
+
+        foreach ($playlist->getTracks() as $track) {
+            $requestBody['relationships']['tracks']['data'][] = [
+                'id' => $track->getId(),
+                'type' => $track->getType(),
+            ];
+        }
+
+        return $this->client->apiRequest(
+            'POST',
+            'me/library/playlists',
+            [
+                'Content-Type' => 'application/json',
+            ],
+            json_encode($requestBody)
+        );
     }
 }
