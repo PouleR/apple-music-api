@@ -170,12 +170,79 @@ class AppleMusicAPI
      */
     public function getRecentlyPlayedResources($limit = 5, $offset = 0)
     {
-        $queryString = http_build_query([
-            'offset' => $offset,
-            'limit' => min($limit, 10),
-        ]);
+        $requestUrl = sprintf('me/recent/played?%s', $this->getLimitOffsetQueryString($limit, $offset, 10));
 
-        $requestUrl = sprintf('me/recent/played?%s', $queryString);
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
+
+    /**
+     * Fetch all the library playlists in alphabetical order.
+     * https://developer.apple.com/documentation/applemusicapi/get_all_library_playlists
+     *
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getAllLibraryPlaylists($limit = 25, $offset = 0)
+    {
+        $requestUrl = sprintf('me/library/playlists?%s', $this->getLimitOffsetQueryString($limit, $offset));
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
+
+    /**
+     * Fetch all the library albums in alphabetical order.
+     * https://developer.apple.com/documentation/applemusicapi/get_all_library_albums
+     *
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getAllLibraryAlbums($limit = 25, $offset = 0)
+    {
+        $requestUrl = sprintf('me/library/albums?%s', $this->getLimitOffsetQueryString($limit, $offset));
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
+
+    /**
+     * Fetch all the library artists in alphabetical order.
+     * https://developer.apple.com/documentation/applemusicapi/get_all_library_artists
+     *
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getAllLibraryArtists($limit = 25, $offset = 0)
+    {
+        $requestUrl = sprintf('me/library/artists?%s', $this->getLimitOffsetQueryString($limit, $offset));
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
+
+    /**
+     * Fetch all the library music videos in alphabetical order.
+     * https://developer.apple.com/documentation/applemusicapi/get_all_library_music_videos
+     *
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getAllLibraryMusicVideos($limit = 25, $offset = 0)
+    {
+        $requestUrl = sprintf('me/library/music-videos?%s', $this->getLimitOffsetQueryString($limit, $offset));
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -234,5 +301,20 @@ class AppleMusicAPI
             ],
             json_encode($requestBody)
         );
+    }
+
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @param int $maxLimit
+     *
+     * @return string
+     */
+    private function getLimitOffsetQueryString($limit, $offset, $maxLimit = 100)
+    {
+        return http_build_query([
+            'offset' => $offset,
+            'limit' => min($limit, $maxLimit),
+        ]);
     }
 }

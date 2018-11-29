@@ -38,6 +38,11 @@ class APIClient
     protected $musicUserToken = '';
 
     /**
+     * @var int
+     */
+    protected $lastHttpStatusCode = 0;
+
+    /**
      * APIClient constructor.
      * @param HttpClient|null     $httpClient
      * @param RequestFactory|null $requestFactory
@@ -108,7 +113,17 @@ class APIClient
             );
         }
 
+        $this->lastHttpStatusCode = $response->getStatusCode();
+
         return json_decode($response->getBody(), false);
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastHttpStatusCode()
+    {
+        return $this->lastHttpStatusCode;
     }
 
     /**
