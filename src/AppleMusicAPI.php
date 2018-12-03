@@ -302,6 +302,25 @@ class AppleMusicAPI
             json_encode($requestBody)
         );
     }
+    
+    /**
+     * Search for a catalog resource
+     * https://developer.apple.com/documentation/applemusicapi/search_for_catalog_resources
+     * https://api.music.apple.com/v1/catalog/us/search?term=caldonia&types=songs
+     *
+     * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
+     * @param string $searchTerm The entered text for the search with ‘+’ characters between each word, to replace spaces
+     * @param string $searchTypes The list of the types of resources to include in the results. artists,albums,songs
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function searchCatalog($storefront, $searchTerm, $searchTypes)
+    {
+        $requestUrl = sprintf('catalog/%s/search?term=%s&types=%s', $storefront, $searchTerm, $searchTypes);
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
 
     /**
      * @param int $limit
