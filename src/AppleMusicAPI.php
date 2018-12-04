@@ -309,7 +309,8 @@ class AppleMusicAPI
      * https://api.music.apple.com/v1/catalog/us/search?term=caldonia&types=songs
      *
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
-     * @param string $searchTerm The entered text for the search with ‘+’ characters between each word, to replace spaces
+     * @param string $searchTerm The entered text for the search with ‘+’ characters between each word,
+     *                           to replace spaces
      * @param string $searchTypes The list of the types of resources to include in the results. artists,albums,songs
      *
      * @return object
@@ -319,6 +320,7 @@ class AppleMusicAPI
     public function searchCatalog($storefront, $searchTerm, $searchTypes)
     {
         $requestUrl = sprintf('catalog/%s/search?term=%s&types=%s', $storefront, $searchTerm, $searchTypes);
+
         return $this->client->apiRequest('GET', $requestUrl);
     }
 
