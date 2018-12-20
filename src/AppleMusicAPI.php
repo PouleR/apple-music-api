@@ -47,6 +47,36 @@ class AppleMusicAPI
     }
 
     /**
+     * Fetch a single storefront by using its identifier.
+     * https://developer.apple.com/documentation/applemusicapi/get_a_storefront
+     *
+     * @param string $id The identifier (an ISO 3166 alpha-2 country code) for the storefront you want to fetch.
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getStorefront($id)
+    {
+        $requestUrl = sprintf('storefronts/%s', $id);
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
+
+    /**
+     * Fetch all the storefronts in alphabetical order.
+     * https://developer.apple.com/documentation/applemusicapi/get_all_storefronts
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getAllStorefronts()
+    {
+        return $this->client->apiRequest('GET', 'storefronts');
+    }
+
+    /**
      * Fetch one or more charts from the Apple Music Catalog.
      * https://developer.apple.com/documentation/applemusicapi/get_catalog_charts
      *
@@ -144,9 +174,27 @@ class AppleMusicAPI
     }
 
     /**
+     * Fetch a curator by using the curator's identifier.
+     * https://developer.apple.com/documentation/applemusicapi/get_a_catalog_curator
+     *
+     * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
+     * @param string $curatorId The unique identifier for the curator.
+     *
+     * @return object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getCatalogCurator($storefront, $curatorId)
+    {
+        $requestUrl = sprintf('catalog/%s/curators/%s', $storefront, $curatorId);
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
+
+    /**
      * Fetch a user’s storefront.
      * https://developer.apple.com/documentation/applemusicapi/get_a_user_s_storefront
-     *     *
+     *
      * @return object
      *
      * @throws AppleMusicAPIException
