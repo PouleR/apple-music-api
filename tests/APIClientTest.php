@@ -32,7 +32,7 @@ class APIClientTest extends TestCase
     }
 
     /**
-     *
+     * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
     public function testAPIRequestDeveloperToken()
     {
@@ -53,7 +53,7 @@ class APIClientTest extends TestCase
     }
 
     /**
-     *
+     * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
     public function testAPIRequestMusicUserToken()
     {
@@ -86,5 +86,16 @@ class APIClientTest extends TestCase
         $this->httpClient->addException(new \Exception('Whoops', 500));
 
         $this->client->apiRequest('GET', 'test');
+    }
+
+    /**
+     *
+     */
+    public function testResponseType()
+    {
+        self::assertEquals(APIClient::RETURN_AS_OBJECT, $this->client->getResponseType());
+
+        $this->client->setResponseType(APIClient::RETURN_AS_ASSOC);
+        self::assertEquals(APIClient::RETURN_AS_ASSOC, $this->client->getResponseType());
     }
 }

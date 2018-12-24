@@ -18,6 +18,12 @@ class APIClient
     const APPLEMUSIC_API_URL = 'https://api.music.apple.com/v1/';
 
     /**
+     * Return types for json_decode
+     */
+    const RETURN_AS_OBJECT = 0;
+    const RETURN_AS_ASSOC = 1;
+
+    /**
      * @var PluginClient|HttpClient|null
      */
     protected $httpClient;
@@ -41,6 +47,11 @@ class APIClient
      * @var int
      */
     protected $lastHttpStatusCode = 0;
+
+    /**
+     * @var
+     */
+    protected $responseType = self::RETURN_AS_OBJECT;
 
     /**
      * APIClient constructor.
@@ -115,7 +126,7 @@ class APIClient
 
         $this->lastHttpStatusCode = $response->getStatusCode();
 
-        return json_decode($response->getBody(), false);
+        return json_decode($response->getBody(), $this->responseType === self::RETURN_AS_ASSOC);
     }
 
     /**
@@ -124,6 +135,21 @@ class APIClient
     public function getLastHttpStatusCode()
     {
         return $this->lastHttpStatusCode;
+    }
+
+    /**
+     * @param int $responseType
+     */
+    public function setResponseType($responseType)
+    {
+        $this->responseType = $responseType;
+    }
+    /**
+     * @return int
+     */
+    public function getResponseType()
+    {
+        return $this->responseType;
     }
 
     /**
