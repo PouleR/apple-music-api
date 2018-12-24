@@ -31,4 +31,4 @@ before_script:
 script:
   - mkdir -p build/logs
   - vendor/bin/phpcs src -v --standard=PSR2
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit --coverage-text --colors
