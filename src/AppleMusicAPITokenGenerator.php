@@ -2,8 +2,12 @@
 
 namespace PouleR\AppleMusicAPI;
 
-use Jose\Factory\JWKFactory;
-use Jose\Factory\JWSFactory;
+use Jose\Component\Core\AlgorithmManager;
+use Jose\Component\Core\Converter\StandardConverter;
+use Jose\Component\KeyManagement\JWKFactory;
+use Jose\Component\Signature\Algorithm\ES256;
+use Jose\Component\Signature\JWSBuilder;
+use Jose\Component\Signature\Serializer\CompactSerializer;
 
 /**
  * Class AppleMusicAPITokenGenerator
@@ -39,9 +43,26 @@ final class AppleMusicAPITokenGenerator
         ];
 
         try {
-            $key = JWKFactory::createFromKeyFile($keyFile);
+            $jsonConverter = new StandardConverter();
+            $algorithmManager = AlgorithmManager::create([
+                new ES256(),
+            ]);
 
-            return JWSFactory::createJWSToCompactJSON($payload, $key, $headers);
+            $jwsBuilder = new JWSBuilder(
+                $jsonConverter,
+                $algorithmManager
+            );
+
+            $signatureKey = JWKFactory::createFromKeyFile($keyFile);
+            $jws = $jwsBuilder
+                ->create()
+                ->withPayload($jsonConverter->encode($payload))
+                ->addSignature($signatureKey, $headers)
+                ->build();
+
+            $serializer = new CompactSerializer($jsonConverter);
+
+            return $serializer->serialize($jws);
         } catch (\Exception $exception) {
             //Ignore
         }

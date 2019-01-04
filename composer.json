@@ -27,8 +27,9 @@
         "php-http/message-factory": "^1.0",
         "php-http/curl-client": "^1.7",
         "php-http/client-common": "^1.0",
-        "spomky-labs/jose": "^7.1",
-        "ext-json": "*"
+        "ext-json": "*",
+        "web-token/jwt-key-mgmt": "^1.2",
+        "web-token/jwt-signature": "^1.2"
     },
     "autoload": {
         "psr-4": {
