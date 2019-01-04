@@ -1,12 +1,17 @@
 <?php
 
-namespace PouleR\AppleMusicAPI\Request;
+namespace PouleR\AppleMusicAPI\Entity;
 
 /**
- * Class LibraryPlaylistRequestTrack
+ * Class LibraryResource
  */
-class LibraryPlaylistRequestTrack
+class LibraryResource
 {
+    public const TYPE_SONG = 'songs';
+    public const TYPE_ALBUM = 'albums';
+    public const TYPE_PLAYLIST = 'playlists';
+    public const TYPE_MUSICVIDEO = 'music-videos';
+
     /**
      * @var string
      */
@@ -21,7 +26,7 @@ class LibraryPlaylistRequestTrack
      * @param string $id
      * @param string $type
      */
-    public function __construct($id, $type = 'songs')
+    public function __construct($id, $type = self::TYPE_SONG)
     {
         $this->setId($id);
         $this->setType($type);

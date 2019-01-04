@@ -2,6 +2,8 @@
 
 namespace PouleR\AppleMusicAPI\Request;
 
+use PouleR\AppleMusicAPI\Entity\LibraryResource;
+
 /**
  * Class LibraryPlaylistCreationRequest
  */
@@ -18,7 +20,7 @@ class LibraryPlaylistCreationRequest
     protected $description = '';
 
     /**
-     * @var LibraryPlaylistRequestTrack[]
+     * @var LibraryResource[]
      */
     protected $tracks = [];
 
@@ -63,15 +65,15 @@ class LibraryPlaylistCreationRequest
     }
 
     /**
-     * @param LibraryPlaylistRequestTrack $track
+     * @param LibraryResource $track
      */
-    public function addTrack(LibraryPlaylistRequestTrack $track)
+    public function addTrack(LibraryResource $track)
     {
         $this->tracks[] = $track;
     }
 
     /**
-     * @return LibraryPlaylistRequestTrack[]
+     * @return LibraryResource[]
      */
     public function getTracks()
     {

@@ -2,7 +2,9 @@
 
 namespace PouleR\AppleMusicAPI;
 
+use PouleR\AppleMusicAPI\Entity\LibraryResource;
 use PouleR\AppleMusicAPI\Request\LibraryPlaylistCreationRequest;
+use PouleR\AppleMusicAPI\Request\LibraryResourceAddRequest;
 
 /**
  * Class AppleMusicAPI
@@ -52,7 +54,7 @@ class AppleMusicAPI
      *
      * @param string $id The identifier (an ISO 3166 alpha-2 country code) for the storefront you want to fetch.
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -67,7 +69,7 @@ class AppleMusicAPI
      * Fetch all the storefronts in alphabetical order.
      * https://developer.apple.com/documentation/applemusicapi/get_all_storefronts
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -85,7 +87,7 @@ class AppleMusicAPI
      * @param int    $limit The number of resources to include per chart.
      *                      The default value is 20 and the maximum value is 50.
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -108,7 +110,7 @@ class AppleMusicAPI
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param string $playlistId The unique identifier for the playlist.
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -126,7 +128,7 @@ class AppleMusicAPI
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param string $albumId The unique identifier for the album.
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -144,7 +146,7 @@ class AppleMusicAPI
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param string $songId The unique identifier for the song.
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -162,7 +164,7 @@ class AppleMusicAPI
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param string $artistId The unique identifier for the artist.
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -180,7 +182,7 @@ class AppleMusicAPI
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param string $curatorId The unique identifier for the curator.
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -195,7 +197,7 @@ class AppleMusicAPI
      * Fetch a user’s storefront.
      * https://developer.apple.com/documentation/applemusicapi/get_a_user_s_storefront
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -212,7 +214,7 @@ class AppleMusicAPI
      *                   that are returned.
      * @param int $offset The next page or group of objects to fetch.
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -230,7 +232,7 @@ class AppleMusicAPI
      * @param int $limit
      * @param int $offset
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -248,7 +250,7 @@ class AppleMusicAPI
      * @param int $limit
      * @param int $offset
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -266,7 +268,7 @@ class AppleMusicAPI
      * @param int $limit
      * @param int $offset
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -284,7 +286,7 @@ class AppleMusicAPI
      * @param int $limit
      * @param int $offset
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -299,23 +301,36 @@ class AppleMusicAPI
      * Add a catalog resource to a user’s iCloud Music Library.
      * https://developer.apple.com/documentation/applemusicapi/add_a_resource_to_a_library
      *
-     * @param array $ids The unique catalog identifiers for the resources.
-     *                   To indicate the type of resource to be added, ids must be followed
-     *                   by one of the allowed values.
-     *                   Multiple types can be added in the same request.
-     *                   Possible values: albums, music-videos, playlists, songs
+     * @param LibraryResourceAddRequest $addRequest
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function addResourceToLibrary($ids)
+    public function addResourceToLibrary(LibraryResourceAddRequest $addRequest)
     {
-        $queryString = http_build_query([
-            'ids' => $ids,
-        ]);
+        $requestParameters = [];
 
-        $requestUrl = sprintf('me/library?%s', urldecode($queryString));
+        foreach ($addRequest->getSongs() as $song) {
+            $this->appendResourceToRequest($requestParameters, $song);
+        }
+
+        foreach ($addRequest->getAlbums() as $album) {
+            $this->appendResourceToRequest($requestParameters, $album);
+        }
+
+        foreach ($addRequest->getMusicVideos() as $musicVideo) {
+            $this->appendResourceToRequest($requestParameters, $musicVideo);
+        }
+
+        foreach ($addRequest->getPlaylists() as $playlist) {
+            $this->appendResourceToRequest($requestParameters, $playlist);
+        }
+
+        $requestUrl = sprintf(
+            'me/library?%s',
+            urldecode(http_build_query(['ids' => $requestParameters]))
+        );
 
         return $this->client->apiRequest('POST', $requestUrl, [], ' ');
     }
@@ -323,7 +338,7 @@ class AppleMusicAPI
     /**
      * @param LibraryPlaylistCreationRequest $playlist
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -350,7 +365,40 @@ class AppleMusicAPI
             json_encode($requestBody)
         );
     }
-    
+
+    /**
+     * @param string            $playlistId
+     * @param LibraryResource[] $tracks A list of dictionaries with information about the tracks to add.
+     *
+     * @return array|object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function addTracksToLibraryPlaylist($playlistId, array $tracks)
+    {
+        $requestBody = [];
+
+        foreach ($tracks as $track) {
+            if (!$track instanceof LibraryResource) {
+                throw new AppleMusicAPIException('Invalid track');
+            }
+
+            $requestBody['data'][] = [
+                'id' => $track->getId(),
+                'type' => $track->getType(),
+            ];
+        }
+
+        return $this->client->apiRequest(
+            'POST',
+            sprintf('me/library/playlists/%s/tracks', $playlistId),
+            [
+                'Content-Type' => 'application/json',
+            ],
+            json_encode($requestBody)
+        );
+    }
+
     /**
      * Search for a catalog resource
      * https://developer.apple.com/documentation/applemusicapi/search_for_catalog_resources
@@ -361,7 +409,7 @@ class AppleMusicAPI
      *                           to replace spaces
      * @param string $searchTypes The list of the types of resources to include in the results. artists,albums,songs
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */
@@ -385,5 +433,18 @@ class AppleMusicAPI
             'offset' => $offset,
             'limit' => min($limit, $maxLimit),
         ]);
+    }
+
+    /**
+     * @param array           $requestParameters
+     * @param LibraryResource $resource
+     */
+    private function appendResourceToRequest(array &$requestParameters, LibraryResource $resource)
+    {
+        if (array_key_exists($resource->getType(), $requestParameters)) {
+            $requestParameters[$resource->getType()] .= ','.$resource->getId();
+        } else {
+            $requestParameters[$resource->getType()] = $resource->getId();
+        }
     }
 }

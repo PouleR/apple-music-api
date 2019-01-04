@@ -5,8 +5,9 @@ namespace PouleR\AppleMusicAPI\Tests;
 use PHPUnit\Framework\TestCase;
 use PouleR\AppleMusicAPI\APIClient;
 use PouleR\AppleMusicAPI\AppleMusicAPI;
+use PouleR\AppleMusicAPI\Entity\LibraryResource;
 use PouleR\AppleMusicAPI\Request\LibraryPlaylistCreationRequest;
-use PouleR\AppleMusicAPI\Request\LibraryPlaylistRequestTrack;
+use PouleR\AppleMusicAPI\Request\LibraryResourceAddRequest;
 
 /**
  * Class AppleMusicAPITest
@@ -245,14 +246,19 @@ class AppleMusicAPITest extends TestCase
      */
     public function testResourceToLibrary()
     {
+        $request = new LibraryResourceAddRequest();
+        $request->addSong(new LibraryResource('123'));
+        $request->addSong(new LibraryResource('888'));
+        $request->addAlbum(new LibraryResource('456', LibraryResource::TYPE_ALBUM));
+
         $this->client->expects(static::once())
             ->method('apiRequest')
-            ->with('POST', 'me/library?ids[0]=1&ids[1]=2&ids[2]=3', [], ' ')
+            ->with('POST', 'me/library?ids[songs]=123,888&ids[albums]=456', [], ' ')
             ->willReturn('OK');
 
         self::assertEquals(
             'OK',
-            $this->api->addResourceToLibrary([1, 2, 3])
+            $this->api->addResourceToLibrary($request)
         );
     }
 
@@ -264,8 +270,8 @@ class AppleMusicAPITest extends TestCase
         $playlist = new LibraryPlaylistCreationRequest('unit.test');
         $playlist->setDescription('description');
 
-        $track1 = new LibraryPlaylistRequestTrack(5);
-        $track2 = new LibraryPlaylistRequestTrack(3);
+        $track1 = new LibraryResource(5);
+        $track2 = new LibraryResource(3);
 
         $playlist->addTrack($track1);
         $playlist->addTrack($track2);
