@@ -72,12 +72,12 @@ class AppleMusicAPITest extends TestCase
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
-            ->with('GET', 'catalog/nl/charts?types=albums%2Csongs&limit=15')
+            ->with('GET', 'catalog/nl/charts?types=albums%2Csongs&offset=0&limit=15&genre=20')
             ->willReturn('{"OK"}');
 
         self::assertEquals(
             '{"OK"}',
-            $this->api->getCatalogCharts('nl', ['albums', 'songs'], 15)
+            $this->api->getCatalogCharts('nl', ['albums', 'songs'], 20, 15)
         );
     }
 

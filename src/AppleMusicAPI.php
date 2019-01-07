@@ -83,22 +83,29 @@ class AppleMusicAPI
      * https://developer.apple.com/documentation/applemusicapi/get_catalog_charts
      *
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
-     * @param array  $types The possible values are albums, songs, and music-videos
-     * @param int    $limit The number of resources to include per chart.
-     *                      The default value is 20 and the maximum value is 50.
+     * @param array  $types  The possible values are albums, songs, and music-videos
+     * @param string $genre  The identifier for the genre to use in the chart results.
+     * @param int    $limit  The number of resources to include per chart.
+     *                       The default value is 20 and the maximum value is 50.
+     * @param int    $offset Only appears when chart is specified) The next page or group of objects to fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getCatalogCharts($storefront, $types = [], $limit = 20)
+    public function getCatalogCharts($storefront, $types = [], $genre = '', $limit = 20, $offset = 0)
     {
-        $queryString = http_build_query([
-                'types' => implode(',', $types),
-                'limit' => $limit,
-            ]);
+        $query = [
+            'types' => implode(',', $types),
+            'offset' => $offset,
+            'limit' => $limit,
+        ];
 
-        $requestUrl = sprintf('catalog/%s/charts?%s', $storefront, $queryString);
+        if (!empty($genre)) {
+            $query['genre'] = $genre;
+        }
+
+        $requestUrl = sprintf('catalog/%s/charts?%s', $storefront, http_build_query($query));
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
