@@ -201,6 +201,9 @@ class AppleMusicAPI
     }
 
     /**
+     * Get a Catalog Curator's Relationship Directly by Name
+     * https://developer.apple.com/documentation/applemusicapi/get_a_catalog_curator_s_relationship_directly_by_name
+     *
      * @param string $storefront
      * @param string $curatorId
      * @param string $relationship
