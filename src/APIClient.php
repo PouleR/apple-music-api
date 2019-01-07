@@ -93,7 +93,7 @@ class APIClient
      * @param array                                $headers
      * @param resource|string|StreamInterface|null $body
      *
-     * @return object
+     * @return array|object
      *
      * @throws AppleMusicAPIException
      */

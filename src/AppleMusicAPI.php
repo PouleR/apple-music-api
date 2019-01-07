@@ -201,6 +201,32 @@ class AppleMusicAPI
     }
 
     /**
+     * @param string $storefront
+     * @param string $curatorId
+     * @param string $relationship
+     *
+     * @return array|object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getCatalogCuratorRelationship($storefront, $curatorId, $relationship = 'playlists', $limit = 10, $offset = 0)
+    {
+        if ($relationship !== 'playlists') {
+            throw new AppleMusicAPIException('Invalid relationship given, only \'playlists\' is allowed at the moment.');
+        }
+
+        $requestUrl = sprintf(
+            'catalog/%s/curators/%s/%s?%s',
+            $storefront,
+            $curatorId,
+            $relationship,
+            $this->getLimitOffsetQueryString($limit, $offset)
+        );
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
+
+    /**
      * Fetch a user’s storefront.
      * https://developer.apple.com/documentation/applemusicapi/get_a_user_s_storefront
      *
