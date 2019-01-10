@@ -245,7 +245,7 @@ class AppleMusicAPI
     /**
      * Fetch the recently played resources for the user.
      * https://developer.apple.com/documentation/applemusicapi/get_recently_played_resources
-     *     *
+     *
      * @param int $limit The limit on the number of objects, or number of objects in the specified relationship,
      *                   that are returned.
      * @param int $offset The next page or group of objects to fetch.
@@ -372,6 +372,9 @@ class AppleMusicAPI
     }
 
     /**
+     * Create a New Library Playlist
+     * https://developer.apple.com/documentation/applemusicapi/create_a_new_library_playlist
+     *
      * @param LibraryPlaylistCreationRequest $playlist
      *
      * @return array|object
@@ -403,6 +406,9 @@ class AppleMusicAPI
     }
 
     /**
+     * Add Tracks to a Library Playlist
+     * https://developer.apple.com/documentation/applemusicapi/add_tracks_to_a_library_playlist
+     *
      * @param string            $playlistId
      * @param LibraryResource[] $tracks A list of dictionaries with information about the tracks to add.
      *
