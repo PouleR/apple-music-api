@@ -463,6 +463,34 @@ class AppleMusicAPI
     }
 
     /**
+     * @param string $storefront
+     * @param string $albumId
+     *
+     * @return array containing songIds for the given album
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getSongIdsForAlbum($storefront, $albumId)
+    {
+        $album = $this->getCatalogAlbum($storefront, $albumId);
+
+        if (!isset($album->data[0]->relationships->tracks->data)) {
+            throw new AppleMusicAPIException(sprintf('Invalid response for album with id "%s".', $albumId));
+        }
+
+        $songIds = [];
+        foreach($album->data[0]->relationships->tracks->data as $track) {
+            if (!isset($track->id)) {
+                continue;
+            }
+
+            $songIds[] = $track->id;
+        }
+
+        return $songIds;
+    }
+
+    /**
      * @param int $limit
      * @param int $offset
      * @param int $maxLimit
