@@ -80,6 +80,14 @@ class APIClient
     }
 
     /**
+     * @return string
+     */
+    public function getDeveloperToken()
+    {
+        return $this->developerToken;
+    }
+
+    /**
      * @param string $musicUserToken
      */
     public function setMusicUserToken(string $musicUserToken)

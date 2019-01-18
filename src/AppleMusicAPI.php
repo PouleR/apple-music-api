@@ -41,6 +41,14 @@ class AppleMusicAPI
     }
 
     /**
+     * @return string
+     */
+    public function getDeveloperToken()
+    {
+        return $this->client->getDeveloperToken();
+    }
+
+    /**
      * @param string $musicUserToken
      */
     public function setMusicUserToken($musicUserToken)
