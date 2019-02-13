@@ -487,7 +487,7 @@ class AppleMusicAPI
         }
 
         $songIds = [];
-        foreach($album->data[0]->relationships->tracks->data as $track) {
+        foreach ($album->data[0]->relationships->tracks->data as $track) {
             if (!isset($track->id)) {
                 continue;
             }
