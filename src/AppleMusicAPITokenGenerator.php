@@ -12,7 +12,7 @@ use Jose\Component\Signature\Serializer\CompactSerializer;
 /**
  * Class AppleMusicAPITokenGenerator
  */
-final class AppleMusicAPITokenGenerator
+class AppleMusicAPITokenGenerator
 {
     public const MAX_EXP_DAYS = 30;
     private const TOKEN_TYPE = 'JWT';
