@@ -34,7 +34,7 @@ $ composer require pouler/apple-music-api php-http/guzzle6-adapter php-http/mess
 ```
 
 ## Usage
-Before using the Apple Music API, you need to sign up for the Apple Developer Programm. Read more about this [here](https://developer.apple.com/documentation/applemusicapi/getting_keys_and_creating_tokens).
+Before using the Apple Music API, you need to sign up for the Apple Developer Program. Read more about this [here](https://developer.apple.com/documentation/applemusicapi/getting_keys_and_creating_tokens).
 
 ```php
 <?php
