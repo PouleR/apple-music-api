@@ -3,6 +3,7 @@
 namespace PouleR\AppleMusicAPI\Tests\Request;
 
 use PHPUnit\Framework\TestCase;
+use PouleR\AppleMusicAPI\AppleMusicAPIException;
 use PouleR\AppleMusicAPI\Entity\LibraryResource;
 use PouleR\AppleMusicAPI\Request\LibraryResourceAddRequest;
 
@@ -19,25 +20,24 @@ class LibraryResourceAddRequestTest extends TestCase
     /**
      *
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->addRequest = new LibraryResourceAddRequest();
     }
 
     /**
-     * @expectedException \PouleR\AppleMusicAPI\AppleMusicAPIException
-     *
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testSongsException()
+    public function testSongsException(): void
     {
+        $this->expectException(AppleMusicAPIException::class);
         $this->addRequest->addSong(new LibraryResource('invalid',LibraryResource::TYPE_ALBUM));
     }
 
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testSongs()
+    public function testSongs(): void
     {
         $this->addRequest->addSong(new LibraryResource('song1'));
         $this->addRequest->addSong(new LibraryResource('song2'));
@@ -45,57 +45,54 @@ class LibraryResourceAddRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \PouleR\AppleMusicAPI\AppleMusicAPIException
-     *
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testAlbumsException()
+    public function testAlbumsException(): void
     {
+        $this->expectException(AppleMusicAPIException::class);
         $this->addRequest->addAlbum(new LibraryResource('invalid'));
     }
 
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testAlbums()
+    public function testAlbums(): void
     {
         $this->addRequest->addAlbum(new LibraryResource('album3', LibraryResource::TYPE_ALBUM));
         self::assertEquals('album3', $this->addRequest->getAlbums()[0]->getId());
     }
 
     /**
-     * @expectedException \PouleR\AppleMusicAPI\AppleMusicAPIException
-     *
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testPlaylistsException()
+    public function testPlaylistsException(): void
     {
+        $this->expectException(AppleMusicAPIException::class);
         $this->addRequest->addPlaylist(new LibraryResource('invalid', LibraryResource::TYPE_MUSICVIDEO));
     }
 
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testPlaylists()
+    public function testPlaylists(): void
     {
         $this->addRequest->addPlaylist(new LibraryResource('play-list', LibraryResource::TYPE_PLAYLIST));
         self::assertCount(1, $this->addRequest->getPlaylists());
     }
 
     /**
-     * @expectedException \PouleR\AppleMusicAPI\AppleMusicAPIException
-     *
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testMusicVideosException()
+    public function testMusicVideosException(): void
     {
+        $this->expectException(AppleMusicAPIException::class);
         $this->addRequest->addMusicVideo(new LibraryResource('invalid', LibraryResource::TYPE_PLAYLIST));
     }
 
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testMusicVideos()
+    public function testMusicVideos(): void
     {
         $this->addRequest->addMusicVideo(new LibraryResource('video', LibraryResource::TYPE_MUSICVIDEO));
         self::assertCount(1, $this->addRequest->getMusicVideos());

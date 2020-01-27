@@ -2,6 +2,7 @@
 
 namespace PouleR\AppleMusicAPI\Tests;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PouleR\AppleMusicAPI\APIClient;
 use PouleR\AppleMusicAPI\AppleMusicAPI;
@@ -15,7 +16,7 @@ use PouleR\AppleMusicAPI\Request\LibraryResourceAddRequest;
 class AppleMusicAPITest extends TestCase
 {
     /**
-     * @var APIClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var APIClient|MockObject
      */
     private $client;
 
@@ -27,7 +28,7 @@ class AppleMusicAPITest extends TestCase
     /**
      *
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->client = $this->createMock(APIClient::class);
         $this->api = new AppleMusicAPI($this->client);
@@ -36,7 +37,7 @@ class AppleMusicAPITest extends TestCase
     /**
      *
      */
-    public function testAPIClient()
+    public function testAPIClient(): void
     {
         self::assertEquals($this->client, $this->api->getAPIClient());
     }
@@ -44,7 +45,7 @@ class AppleMusicAPITest extends TestCase
     /**
      *
      */
-    public function testDeveloperToken()
+    public function testDeveloperToken(): void
     {
         $this->client->expects(static::once())
             ->method('setDeveloperToken')
@@ -56,7 +57,7 @@ class AppleMusicAPITest extends TestCase
     /**
      *
      */
-    public function testMusicUserToken()
+    public function testMusicUserToken(): void
     {
         $this->client->expects(static::once())
             ->method('setMusicUserToken')
@@ -68,7 +69,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testCatalogCharts()
+    public function testCatalogCharts(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -84,7 +85,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testCatalogPlaylist()
+    public function testCatalogPlaylist(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -100,7 +101,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testCatalogAlbum()
+    public function testCatalogAlbum(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -132,7 +133,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testCatalogArtist()
+    public function testCatalogArtist(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -148,7 +149,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testUsersStorefront()
+    public function testUsersStorefront(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -164,7 +165,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testRecentlyPlayedResources()
+    public function testRecentlyPlayedResources(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -180,7 +181,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testAllLibraryPlaylists()
+    public function testAllLibraryPlaylists(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -196,7 +197,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testAllLibraryAlbums()
+    public function testAllLibraryAlbums(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -212,7 +213,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testAllLibraryArtists()
+    public function testAllLibraryArtists(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -228,7 +229,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testAllLibraryMusicVideos()
+    public function testAllLibraryMusicVideos(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
@@ -244,7 +245,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testResourceToLibrary()
+    public function testResourceToLibrary(): void
     {
         $request = new LibraryResourceAddRequest();
         $request->addSong(new LibraryResource('123'));
@@ -265,7 +266,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testCreateLibraryPlaylist()
+    public function testCreateLibraryPlaylist(): void
     {
         $playlist = new LibraryPlaylistCreationRequest('unit.test');
         $playlist->setDescription('description');
@@ -295,7 +296,7 @@ class AppleMusicAPITest extends TestCase
     /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
-    public function testSearchCatalog()
+    public function testSearchCatalog(): void
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
