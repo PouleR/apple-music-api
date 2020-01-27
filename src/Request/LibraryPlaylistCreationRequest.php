@@ -35,7 +35,7 @@ class LibraryPlaylistCreationRequest
     /**
      * @param string $name
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -51,7 +51,7 @@ class LibraryPlaylistCreationRequest
     /**
      * @param string $description
      */
-    public function setDescription(string $description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
@@ -67,7 +67,7 @@ class LibraryPlaylistCreationRequest
     /**
      * @param LibraryResource $track
      */
-    public function addTrack(LibraryResource $track)
+    public function addTrack(LibraryResource $track): void
     {
         $this->tracks[] = $track;
     }
@@ -75,7 +75,7 @@ class LibraryPlaylistCreationRequest
     /**
      * @return LibraryResource[]
      */
-    public function getTracks()
+    public function getTracks(): array
     {
         return $this->tracks;
     }

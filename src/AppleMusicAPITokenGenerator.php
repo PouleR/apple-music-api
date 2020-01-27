@@ -25,7 +25,7 @@ class AppleMusicAPITokenGenerator
      *
      * @return null|string
      */
-    public function generateDeveloperToken($teamId, $keyId, $keyFile, $expirationDays = self::MAX_EXP_DAYS)
+    public function generateDeveloperToken($teamId, $keyId, $keyFile, $expirationDays = self::MAX_EXP_DAYS): ?string
     {
         $time = time();
 

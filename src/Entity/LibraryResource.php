@@ -35,7 +35,7 @@ class LibraryResource
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -43,7 +43,7 @@ class LibraryResource
     /**
      * @param $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $id;
     }
@@ -51,7 +51,7 @@ class LibraryResource
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -59,7 +59,7 @@ class LibraryResource
     /**
      * @param $type
      */
-    public function setType($type)
+    public function setType($type): void
     {
         $this->type = $type;
     }

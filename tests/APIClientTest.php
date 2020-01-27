@@ -2,13 +2,12 @@
 
 namespace PouleR\AppleMusicAPI\Tests;
 
-use GuzzleHttp\Psr7\Response;
-use Http\Message\RequestFactory;
-use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use PouleR\AppleMusicAPI\APIClient;
 use PouleR\AppleMusicAPI\AppleMusicAPIException;
-use Psr\Http\Message\RequestFactoryInterface;
+use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
  * Class APIClientTest
@@ -16,42 +15,19 @@ use Psr\Http\Message\RequestFactoryInterface;
 class APIClientTest extends TestCase
 {
     /**
-     * @var Client
-     */
-    private $httpClient;
-
-    /**
-     * @var APIClient
-     */
-    private $client;
-
-    /**
-     *
-     */
-    public function setUp(): void
-    {
-        $this->httpClient = new Client();
-        $this->client = new APIClient($this->httpClient);
-    }
-
-    /**
      * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
     public function testAPIRequestDeveloperToken(): void
     {
-        $this->client->setDeveloperToken('dev.token');
-        $this->httpClient->addResponse(new Response(200, [], '{"id": "12345","title": "OnlyDevToken"}'));
+        $mockResponse = new MockResponse('{"id": "12345","title": "OnlyDevToken"}');
+        $httpClient = new MockHttpClient([$mockResponse]);
+        $apiClient = new APIClient($httpClient);
 
-        $response = $this->client->apiRequest('GET', 'catalog/1/playlists/2');
-        self::assertInstanceOf(\stdClass::class, $response);
+        $apiClient->setDeveloperToken('dev.token');
+        $response = $apiClient->apiRequest('GET', 'catalog/1/playlists/2');
 
-        $requests = $this->httpClient->getRequests();
-        self::assertCount(1, $requests);
-        self::assertEquals('GET', $requests[0]->getMethod());
-        self::assertEquals('api.music.apple.com', $requests[0]->getUri()->getHost());
-        self::assertEquals('/v1//catalog/1/playlists/2', $requests[0]->getRequestTarget());
-        self::assertEquals(['Bearer dev.token'], $requests[0]->getHeader('Authorization'));
-        self::assertEmpty($requests[0]->getHeader('Music-User-Token'));
+        $requestOptions = $mockResponse->getRequestOptions();
+        self::assertContains('Authorization: Bearer dev.token', $requestOptions['headers']);
         self::assertEquals('12345', $response->id);
     }
 
@@ -60,35 +36,39 @@ class APIClientTest extends TestCase
      */
     public function testAPIRequestMusicUserToken(): void
     {
-        $this->client->setDeveloperToken('dev.token');
-        $this->client->setMusicUserToken('user.token');
+        $mockResponse = new MockResponse('{"id": "12345","title": "UserToken"}');
+        $httpClient = new MockHttpClient([$mockResponse]);
+        $apiClient = new APIClient($httpClient);
+        $apiClient->setDeveloperToken('dev.token');
+        $apiClient->setMusicUserToken('user.token');
 
-        $this->httpClient->addResponse(new Response(200, [], '{"id": "12345","title": "UserToken"}'));
-        $response = $this->client->apiRequest('GET', 'catalog/2/playlists/3');
+        $response = $apiClient->apiRequest('GET', 'catalog/2/playlists/3');
+        $requestOptions = $mockResponse->getRequestOptions();
 
-        $requests = $this->httpClient->getRequests();
-        self::assertCount(1, $requests);
-        self::assertEquals('GET', $requests[0]->getMethod());
-        self::assertEquals('api.music.apple.com', $requests[0]->getUri()->getHost());
-        self::assertEquals('/v1//catalog/2/playlists/3', $requests[0]->getRequestTarget());
-        self::assertEquals(['Bearer dev.token'], $requests[0]->getHeader('Authorization'));
-        self::assertEquals(['user.token'], $requests[0]->getHeader('Music-User-Token'));
+        self::assertContains('Authorization: Bearer dev.token', $requestOptions['headers']);
+        self::assertContains('Music-User-Token: user.token', $requestOptions['headers']);
         self::assertEquals('UserToken', $response->title);
     }
 
     /**
-     *
+     * @throws \PouleR\AppleMusicAPI\AppleMusicAPIException
      */
     public function testAPIRequestException(): void
     {
-        $this->client->setDeveloperToken('dev.token');
-        $this->httpClient->addException(new \Exception('Whoops', 500));
+        $callback = function () {
+            throw new TransportException('Whoops', 500);
+        };
+
+        $httpClient = new MockHttpClient($callback);
+        $apiClient = new APIClient($httpClient);
+
+        $apiClient->setDeveloperToken('dev.token');
 
         $this->expectException(AppleMusicAPIException::class);
         $this->expectExceptionMessage('API Request: test, Whoops');
         $this->expectExceptionCode(500);
 
-        $this->client->apiRequest('GET', 'test');
+        $apiClient->apiRequest('GET', 'test');
     }
 
     /**
@@ -96,9 +76,11 @@ class APIClientTest extends TestCase
      */
     public function testResponseType(): void
     {
-        self::assertEquals(APIClient::RETURN_AS_OBJECT, $this->client->getResponseType());
+        $httpClient = new MockHttpClient();
+        $apiClient = new APIClient($httpClient);
+        self::assertEquals(APIClient::RETURN_AS_OBJECT, $apiClient->getResponseType());
 
-        $this->client->setResponseType(APIClient::RETURN_AS_ASSOC);
-        self::assertEquals(APIClient::RETURN_AS_ASSOC, $this->client->getResponseType());
+        $apiClient->setResponseType(APIClient::RETURN_AS_ASSOC);
+        self::assertEquals(APIClient::RETURN_AS_ASSOC, $apiClient->getResponseType());
     }
 }

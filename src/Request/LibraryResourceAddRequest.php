@@ -35,7 +35,7 @@ class LibraryResourceAddRequest
      *
      * @throws AppleMusicAPIException
      */
-    public function addSong(LibraryResource $song)
+    public function addSong(LibraryResource $song): void
     {
         if ($song->getType() !== LibraryResource::TYPE_SONG) {
             $this->throwInvalidTypeException('song', $song);
@@ -49,7 +49,7 @@ class LibraryResourceAddRequest
      *
      * @throws AppleMusicAPIException
      */
-    public function addAlbum(LibraryResource $album)
+    public function addAlbum(LibraryResource $album): void
     {
         if ($album->getType() !== LibraryResource::TYPE_ALBUM) {
             $this->throwInvalidTypeException('album', $album);
@@ -63,7 +63,7 @@ class LibraryResourceAddRequest
      *
      * @throws AppleMusicAPIException
      */
-    public function addMusicVideo(LibraryResource $musicVideo)
+    public function addMusicVideo(LibraryResource $musicVideo): void
     {
         if ($musicVideo->getType() !== LibraryResource::TYPE_MUSICVIDEO) {
             $this->throwInvalidTypeException('music-video', $musicVideo);
@@ -77,7 +77,7 @@ class LibraryResourceAddRequest
      *
      * @throws AppleMusicAPIException
      */
-    public function addPlaylist(LibraryResource $playlist)
+    public function addPlaylist(LibraryResource $playlist): void
     {
         if ($playlist->getType() !== LibraryResource::TYPE_PLAYLIST) {
             $this->throwInvalidTypeException('playlist', $playlist);

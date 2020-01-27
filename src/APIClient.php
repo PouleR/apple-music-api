@@ -2,13 +2,11 @@
 
 namespace PouleR\AppleMusicAPI;
 
-use Http\Client\Common\Plugin\ErrorPlugin;
-use Http\Client\Common\PluginClient;
-use Http\Client\HttpClient;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
-use Http\Message\RequestFactory;
-use Psr\Http\Message\StreamInterface;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Class APIClient
@@ -24,14 +22,9 @@ class APIClient
     const RETURN_AS_ASSOC = 1;
 
     /**
-     * @var PluginClient|HttpClient|null
+     * @var HttpClientInterface
      */
     protected $httpClient;
-
-    /**
-     * @var RequestFactory
-     */
-    protected $requestFactory;
 
     /**
      * @var string
@@ -55,26 +48,17 @@ class APIClient
 
     /**
      * APIClient constructor.
-     * @param HttpClient|null     $httpClient
-     * @param RequestFactory|null $requestFactory
+     * @param HttpClientInterface $httpClient
      */
-    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null)
+    public function __construct(HttpClientInterface $httpClient)
     {
-        if (!$httpClient) {
-            $httpClient = new PluginClient(
-                HttpClientDiscovery::find(),
-                [new ErrorPlugin()]
-            );
-        }
-
         $this->httpClient = $httpClient;
-        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
     }
 
     /**
      * @param string $developerToken
      */
-    public function setDeveloperToken(string $developerToken)
+    public function setDeveloperToken(string $developerToken): void
     {
         $this->developerToken = $developerToken;
     }
@@ -82,7 +66,7 @@ class APIClient
     /**
      * @return string
      */
-    public function getDeveloperToken()
+    public function getDeveloperToken(): string
     {
         return $this->developerToken;
     }
@@ -90,16 +74,16 @@ class APIClient
     /**
      * @param string $musicUserToken
      */
-    public function setMusicUserToken(string $musicUserToken)
+    public function setMusicUserToken(string $musicUserToken): void
     {
         $this->musicUserToken = $musicUserToken;
     }
 
     /**
-     * @param string                               $method
-     * @param string                               $service
-     * @param array                                $headers
-     * @param resource|string|StreamInterface|null $body
+     * @param string                                      $method
+     * @param string                                      $service
+     * @param array                                       $headers
+     * @param array|string|resource|\Traversable|\Closure $body
      *
      * @return array|object
      *
@@ -117,10 +101,11 @@ class APIClient
         $headers = array_merge($headers, $authorizationHeaders);
 
         try {
-            $response = $this->httpClient->sendRequest(
-                $this->requestFactory->createRequest($method, $url, $headers, $body)
-            );
-        } catch (\Exception | \Http\Client\Exception $exception) {
+            $response = $this->httpClient->request($method, $url, ['headers' => $headers, 'body' => $body]);
+            $this->lastHttpStatusCode = $response->getStatusCode();
+
+            return json_decode($response->getContent(), $this->responseType === self::RETURN_AS_ASSOC);
+        } catch (ServerExceptionInterface | ClientExceptionInterface | RedirectionExceptionInterface | TransportExceptionInterface $exception) {
             throw new AppleMusicAPIException(
                 sprintf(
                     'API Request: %s, %s (%s)',
@@ -131,16 +116,12 @@ class APIClient
                 $exception->getCode()
             );
         }
-
-        $this->lastHttpStatusCode = $response->getStatusCode();
-
-        return json_decode($response->getBody(), $this->responseType === self::RETURN_AS_ASSOC);
     }
 
     /**
      * @return int
      */
-    public function getLastHttpStatusCode()
+    public function getLastHttpStatusCode(): int
     {
         return $this->lastHttpStatusCode;
     }
@@ -148,14 +129,14 @@ class APIClient
     /**
      * @param int $responseType
      */
-    public function setResponseType($responseType)
+    public function setResponseType($responseType): void
     {
         $this->responseType = $responseType;
     }
     /**
      * @return int
      */
-    public function getResponseType()
+    public function getResponseType(): int
     {
         return $this->responseType;
     }
