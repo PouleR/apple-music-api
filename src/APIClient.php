@@ -13,7 +13,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
   */
 class APIClient
 {
-    const APPLEMUSIC_API_URL = 'https://api.music.apple.com/v1/';
+    const APPLEMUSIC_API_URL = 'https://api.music.apple.com/v1';
 
     /**
      * Return types for json_decode
