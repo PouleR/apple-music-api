@@ -19,7 +19,7 @@
         "squizlabs/php_codesniffer": "^3.0"
     },
     "require": {
-        "php": "^7.3",
+        "php": "^7.3|^8.0",
         "ext-json": "*",
         "symfony/http-client": "^4.3|^4.4|^5.0",
         "web-token/jwt-key-mgmt": "^2.0",
