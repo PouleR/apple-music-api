@@ -1,6 +1,5 @@
 [![Latest Stable Version](https://poser.pugx.org/pouler/apple-music-api/v/stable)](https://packagist.org/packages/pouler/apple-music-api)
 [![Latest Unstable Version](https://poser.pugx.org/pouler/apple-music-api/v/unstable)](https://packagist.org/packages/pouler/apple-music-api)
-[![Build Status](https://travis-ci.org/PouleR/apple-music-api.svg?branch=master)](https://travis-ci.org/PouleR/apple-music-api)
 
 # Apple Music API PHP
 
