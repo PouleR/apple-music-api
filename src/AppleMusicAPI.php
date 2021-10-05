@@ -153,6 +153,24 @@ class AppleMusicAPI
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
+    
+     /**
+     * Fetch albums by a UPC.
+     * https://developer.apple.com/documentation/applemusicapi/get_multiple_catalog_albums_by_upc
+     *
+     * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
+     * @param string $upc An Universal Product Code.
+     *
+     * @return array|object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getMultipleCatalogAlbumsByUpc(string $storefront, string $upc)
+    {
+        $requestUrl = sprintf('catalog/%s/albums?filter[upc]=%s', $storefront, $upc);
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
 
     /**
      * Fetch a song by using its identifier.
@@ -168,6 +186,24 @@ class AppleMusicAPI
     public function getCatalogSong($storefront, $songId)
     {
         $requestUrl = sprintf('catalog/%s/songs/%s', $storefront, $songId);
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
+    
+     /**
+     * Fetch songs by an ISRC.
+     * https://developer.apple.com/documentation/applemusicapi/get_multiple_catalog_songs_by_isrc
+     *
+     * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
+     * @param string $isrc An unique International Standard Recording Code.
+     *
+     * @return array|object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getMultipleCatalogSongsByIsrc(string $storefront, string $isrc)
+    {
+        $requestUrl = sprintf('catalog/%s/songs?filter[isrc]=%s', $storefront, $isrc);
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
