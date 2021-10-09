@@ -524,7 +524,7 @@ class AppleMusicAPI
      */
     public function searchCatalog($storefront, $searchTerm, $searchTypes)
     {
-        $requestUrl = sprintf('catalog/%s/search?term=%s&limit=2&types=%s', $storefront, $searchTerm, $searchTypes);
+        $requestUrl = sprintf('catalog/%s/search?term=%s&types=%s', $storefront, $searchTerm, $searchTypes);
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
