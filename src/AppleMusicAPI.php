@@ -160,6 +160,25 @@ class AppleMusicAPI
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
+    
+    /**
+     * Fetch albums by a UPC.
+     * https://developer.apple.com/documentation/applemusicapi/get_multiple_catalog_albums_by_upc
+     *
+     * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
+     * @param string $upc An Universal Product Code.
+     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     *
+     * @return array|object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getMultipleCatalogAlbumsByUpc(string $storefront, string $upc, string $include = '')
+    {
+        $requestUrl = sprintf('catalog/%s/albums?filter[upc]=%s&include=%s', $storefront, $upc, $include);
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
 
     /**
      * Fetch a song by using its identifier.
@@ -195,25 +214,6 @@ class AppleMusicAPI
     public function getMultipleCatalogSongsByIsrc(string $storefront, string $isrc, string $include = '')
     {
         $requestUrl = sprintf('catalog/%s/songs?filter[isrc]=%s&include=%s', $storefront, $isrc, $include);
-
-        return $this->client->apiRequest('GET', $requestUrl);
-    }
-
-    /**
-     * Fetch albums by a UPC.
-     * https://developer.apple.com/documentation/applemusicapi/get_multiple_catalog_albums_by_upc
-     *
-     * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
-     * @param string $upc An Universal Product Code.
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
-     *
-     * @return array|object
-     *
-     * @throws AppleMusicAPIException
-     */
-    public function getMultipleCatalogAlbumsByUpc(string $storefront, string $upc, string $include = '')
-    {
-        $requestUrl = sprintf('catalog/%s/albums?filter[upc]=%s&include=%s', $storefront, $upc, $include);
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
