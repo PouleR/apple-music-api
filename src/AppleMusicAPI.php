@@ -61,15 +61,15 @@ class AppleMusicAPI
      * https://developer.apple.com/documentation/applemusicapi/get_a_storefront
      *
      * @param string $id The identifier (an ISO 3166 alpha-2 country code) for the storefront you want to fetch.
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param array $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getStorefront(string $id, string $include = '')
+    public function getStorefront(string $id, array $include = [])
     {
-        $requestUrl = sprintf('storefronts/%s?include=%s', $id, $include);
+        $requestUrl = sprintf('storefronts/%s?include=%s', $id, implode(',', $include));
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -78,15 +78,15 @@ class AppleMusicAPI
      * Fetch all the storefronts in alphabetical order.
      * https://developer.apple.com/documentation/applemusicapi/get_all_storefronts
      *
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param array $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getAllStorefronts(string $include = '')
+    public function getAllStorefronts(array $include = [])
     {
-        $requestUrl = sprintf('storefronts?include=%s', $include);
+        $requestUrl = sprintf('storefronts?include=%s', implode(',', $include));
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -129,15 +129,19 @@ class AppleMusicAPI
      *
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param string $playlistId The unique identifier for the playlist.
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param array  $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getCatalogPlaylist(string $storefront, string $playlistId, string $include = '')
+    public function getCatalogPlaylist(string $storefront, string $playlistId, array $include = [])
     {
-        $requestUrl = sprintf('catalog/%s/playlists/%s?include=%s', $storefront, $playlistId, $include);
+        $requestUrl = sprintf('catalog/%s/playlists/%s', $storefront, $playlistId);
+
+        if (count($include)) {
+            $requestUrl .= sprintf('?include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -148,15 +152,19 @@ class AppleMusicAPI
      *
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param string $albumId The unique identifier for the album.
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param array  $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getCatalogAlbum(string $storefront, string $albumId, string $include = '')
+    public function getCatalogAlbum(string $storefront, string $albumId, array $include = [])
     {
-        $requestUrl = sprintf('catalog/%s/albums/%s?include=%s', $storefront, $albumId, $include);
+        $requestUrl = sprintf('catalog/%s/albums/%s', $storefront, $albumId);
+
+        if (count($include)) {
+            $requestUrl .= sprintf('?include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -167,15 +175,19 @@ class AppleMusicAPI
      *
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param string $upc An Universal Product Code.
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param array  $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getMultipleCatalogAlbumsByUpc(string $storefront, string $upc, string $include = '')
+    public function getMultipleCatalogAlbumsByUpc(string $storefront, string $upc, array $include = [])
     {
-        $requestUrl = sprintf('catalog/%s/albums?filter[upc]=%s&include=%s', $storefront, $upc, $include);
+        $requestUrl = sprintf('catalog/%s/albums?filter[upc]=%s', $storefront, $upc);
+
+        if (count($include)) {
+            $requestUrl .= sprintf('&include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -186,15 +198,19 @@ class AppleMusicAPI
      *
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param string $songId The unique identifier for the song.
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param array  $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getCatalogSong(string $storefront, string $songId, string $include = '')
+    public function getCatalogSong(string $storefront, string $songId, array $include = [])
     {
-        $requestUrl = sprintf('catalog/%s/songs/%s?include=%s', $storefront, $songId, $include);
+        $requestUrl = sprintf('catalog/%s/songs/%s', $storefront, $songId);
+
+        if (count($include)) {
+            $requestUrl .= sprintf('?include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -205,15 +221,19 @@ class AppleMusicAPI
      *
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param string $isrc An unique International Standard Recording Code.
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param array  $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getMultipleCatalogSongsByIsrc(string $storefront, string $isrc, string $include = '')
+    public function getMultipleCatalogSongsByIsrc(string $storefront, string $isrc, array $include = [])
     {
-        $requestUrl = sprintf('catalog/%s/songs?filter[isrc]=%s&include=%s', $storefront, $isrc, $include);
+        $requestUrl = sprintf('catalog/%s/songs?filter[isrc]=%s', $storefront, $isrc);
+
+        if (count($include)) {
+            $requestUrl .= sprintf('&include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -224,15 +244,19 @@ class AppleMusicAPI
      *
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param string $artistId The unique identifier for the artist.
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param array  $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getCatalogArtist(string $storefront, string $artistId, string $include = '')
+    public function getCatalogArtist(string $storefront, string $artistId, array $include = [])
     {
-        $requestUrl = sprintf('catalog/%s/artists/%s?include=%s', $storefront, $artistId, $include);
+        $requestUrl = sprintf('catalog/%s/artists/%s', $storefront, $artistId);
+
+        if (count($include)) {
+            $requestUrl .= sprintf('?include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -243,15 +267,19 @@ class AppleMusicAPI
      *
      * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
      * @param string $curatorId The unique identifier for the curator.
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param array  $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getCatalogCurator(string $storefront, string $curatorId, string $include)
+    public function getCatalogCurator(string $storefront, string $curatorId, array $include = [])
     {
-        $requestUrl = sprintf('catalog/%s/curators/%s?include=%s', $storefront, $curatorId, $include);
+        $requestUrl = sprintf('catalog/%s/curators/%s', $storefront, $curatorId);
+
+        if (count($include)) {
+            $requestUrl .= sprintf('?include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -263,26 +291,29 @@ class AppleMusicAPI
      * @param string $storefront
      * @param string $curatorId
      * @param string $relationship
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param array  $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getCatalogCuratorRelationship(string $storefront, string $curatorId, string $relationship = 'playlists', int $limit = 10, int $offset = 0, string $include = '')
+    public function getCatalogCuratorRelationship(string $storefront, string $curatorId, string $relationship = 'playlists', int $limit = 10, int $offset = 0, array $include = [])
     {
         if ($relationship !== 'playlists') {
             throw new AppleMusicAPIException('Invalid relationship given, only \'playlists\' is allowed at the moment.');
         }
 
         $requestUrl = sprintf(
-            'catalog/%s/curators/%s/%s?%s&include=%s',
+            'catalog/%s/curators/%s/%s?%s',
             $storefront,
             $curatorId,
             $relationship,
-            $include,
             $this->getLimitOffsetQueryString($limit, $offset)
         );
+
+        if (count($include)) {
+            $requestUrl .= sprintf('&include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -291,15 +322,19 @@ class AppleMusicAPI
      * Fetch a user’s storefront.
      * https://developer.apple.com/documentation/applemusicapi/get_a_user_s_storefront
      *
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param array $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getUsersStorefront(string $include = '')
+    public function getUsersStorefront(array $include = [])
     {
-        $requestUrl = sprintf('me/storefront?include=%s', $include);
+        $requestUrl = 'me/storefront';
+
+        if (count($include)) {
+            $requestUrl .= sprintf('?include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -308,18 +343,22 @@ class AppleMusicAPI
      * Fetch the recently played resources for the user.
      * https://developer.apple.com/documentation/applemusicapi/get_recently_played_resources
      *
-     * @param int $limit The limit on the number of objects, or number of objects in the specified relationship,
+     * @param int   $limit The limit on the number of objects, or number of objects in the specified relationship,
      *                   that are returned.
-     * @param int $offset The next page or group of objects to fetch.
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param int   $offset The next page or group of objects to fetch.
+     * @param array $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getRecentlyPlayedResources(int $limit = 5, int $offset = 0, string $include = '')
+    public function getRecentlyPlayedResources(int $limit = 5, int $offset = 0, array $include = [])
     {
-        $requestUrl = sprintf('me/recent/played?%s&include=%s', $this->getLimitOffsetQueryString($limit, $offset, 10), $include);
+        $requestUrl = sprintf('me/recent/played?%s', $this->getLimitOffsetQueryString($limit, $offset, 10));
+
+        if (count($include)) {
+            $requestUrl .= sprintf('&include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -328,17 +367,21 @@ class AppleMusicAPI
      * Fetch all the library playlists in alphabetical order.
      * https://developer.apple.com/documentation/applemusicapi/get_all_library_playlists
      *
-     * @param int $limit
-     * @param int $offset
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param int   $limit
+     * @param int   $offset
+     * @param array $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getAllLibraryPlaylists(int $limit = 25, int $offset = 0, string $include = '')
+    public function getAllLibraryPlaylists(int $limit = 25, int $offset = 0, array $include = [])
     {
-        $requestUrl = sprintf('me/library/playlists?%s&include=%s', $this->getLimitOffsetQueryString($limit, $offset), $include);
+        $requestUrl = sprintf('me/library/playlists?%s', $this->getLimitOffsetQueryString($limit, $offset));
+
+        if (count($include)) {
+            $requestUrl .= sprintf('&include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -347,17 +390,21 @@ class AppleMusicAPI
      * Fetch all the library albums in alphabetical order.
      * https://developer.apple.com/documentation/applemusicapi/get_all_library_albums
      *
-     * @param int $limit
-     * @param int $offset
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param int   $limit
+     * @param int   $offset
+     * @param array $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getAllLibraryAlbums(int $limit = 25, int $offset = 0, string $include = '')
+    public function getAllLibraryAlbums(int $limit = 25, int $offset = 0, array $include = [])
     {
-        $requestUrl = sprintf('me/library/albums?%s&include=%s', $this->getLimitOffsetQueryString($limit, $offset), $include);
+        $requestUrl = sprintf('me/library/albums?%s', $this->getLimitOffsetQueryString($limit, $offset));
+
+        if (count($include)) {
+            $requestUrl .= sprintf('&include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -366,17 +413,21 @@ class AppleMusicAPI
      * Fetch all the library artists in alphabetical order.
      * https://developer.apple.com/documentation/applemusicapi/get_all_library_artists
      *
-     * @param int $limit
-     * @param int $offset
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param int   $limit
+     * @param int   $offset
+     * @param array $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getAllLibraryArtists(int $limit = 25, int $offset = 0, string $include = '')
+    public function getAllLibraryArtists(int $limit = 25, int $offset = 0, array $include = [])
     {
-        $requestUrl = sprintf('me/library/artists?%s&include=%s', $this->getLimitOffsetQueryString($limit, $offset), $include);
+        $requestUrl = sprintf('me/library/artists?%s', $this->getLimitOffsetQueryString($limit, $offset));
+
+        if (count($include)) {
+            $requestUrl .= sprintf('&include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
@@ -385,17 +436,21 @@ class AppleMusicAPI
      * Fetch all the library music videos in alphabetical order.
      * https://developer.apple.com/documentation/applemusicapi/get_all_library_music_videos
      *
-     * @param int $limit
-     * @param int $offset
-     * @param string $include A comma separated list of additional relationships to include in the fetch.
+     * @param int   $limit
+     * @param int   $offset
+     * @param array $include A list of additional relationships to include in the fetch.
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function getAllLibraryMusicVideos(int $limit = 25, int $offset = 0, string $include = '')
+    public function getAllLibraryMusicVideos(int $limit = 25, int $offset = 0, array $include = [])
     {
-        $requestUrl = sprintf('me/library/music-videos?%s&include=%s', $this->getLimitOffsetQueryString($limit, $offset), $include);
+        $requestUrl = sprintf('me/library/music-videos?%s', $this->getLimitOffsetQueryString($limit, $offset));
+
+        if (count($include)) {
+            $requestUrl .= sprintf('&include=%s', implode(',', $include));
+        }
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
