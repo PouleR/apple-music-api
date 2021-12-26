@@ -528,6 +528,28 @@ class AppleMusicAPI
     }
 
     /**
+     * Get a Library Playlist
+     * https://developer.apple.com/documentation/applemusicapi/get_a_library_playlist
+     *
+     * @param string $playlistId
+     * @param array $include A list of additional relationships to include in the fetch.
+     *
+     * @return array|object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getLibraryPlaylist(string $playlistId, array $include = [])
+    {
+        $requestUrl = sprintf('me/library/playlists/%s', $playlistId);
+
+        if (count($include)) {
+            $requestUrl .= sprintf('?include=%s', implode(',', $include));
+        }
+
+        return $this->client->apiRequest('GET', $requestUrl . '?relate=catalog');
+    }
+
+    /**
      * Add Tracks to a Library Playlist
      * https://developer.apple.com/documentation/applemusicapi/add_tracks_to_a_library_playlist
      *
