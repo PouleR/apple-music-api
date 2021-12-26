@@ -546,7 +546,7 @@ class AppleMusicAPI
             $requestUrl .= sprintf('?include=%s', implode(',', $include));
         }
 
-        return $this->client->apiRequest('GET', $requestUrl . '?relate=catalog');
+        return $this->client->apiRequest('GET', $requestUrl);
     }
 
     /**
