@@ -6,7 +6,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: php-actions/composer@v5
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        with:
+          php_version: "8.1"
       - name: Run PHPCS
         run: ./vendor/bin/phpcs src -v --standard=PSR2 --exclude=Generic.Files.LineLength
       - name: Run PHPUnit
