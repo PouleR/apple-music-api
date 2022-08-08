@@ -594,14 +594,22 @@ class AppleMusicAPI
      * @param string $searchTerm The entered text for the search with ‘+’ characters between each word,
      *                           to replace spaces
      * @param string $searchTypes The list of the types of resources to include in the results. artists,albums,songs
+     * @param int $limit The number of objects or number of objects in the specified relationship returned
+     * @param int $offset The next page or group of objects to fetch
      *
      * @return array|object
      *
      * @throws AppleMusicAPIException
      */
-    public function searchCatalog($storefront, $searchTerm, $searchTypes)
+    public function searchCatalog($storefront, $searchTerm, $searchTypes, $limit = 5, $offset = 0)
     {
-        $requestUrl = sprintf('catalog/%s/search?term=%s&types=%s', $storefront, $searchTerm, $searchTypes);
+        $requestUrl = sprintf(
+            'catalog/%s/search?term=%s&types=%s&%s',
+            $storefront,
+            $searchTerm,
+            $searchTypes,
+            $this->getLimitOffsetQueryString($limit, $offset, 25)
+        );
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
