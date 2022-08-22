@@ -300,7 +300,7 @@ class AppleMusicAPITest extends TestCase
     {
         $this->client->expects(static::once())
             ->method('apiRequest')
-            ->with('GET', 'catalog/us/search?term=search&types=songs')
+            ->with('GET', 'catalog/us/search?term=search&types=songs&offset=0&limit=5')
             ->willReturn('{"Search"}');
 
         self::assertEquals(
