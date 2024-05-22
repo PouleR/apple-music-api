@@ -80,7 +80,7 @@ class LibraryPlaylistCreationRequest
     /**
      * @return bool
      */
-    public function getIsPublic(): bool
+    public function isPublic(): bool
     {
         return $this->isPublic;
     }
