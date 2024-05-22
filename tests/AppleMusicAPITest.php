@@ -283,7 +283,7 @@ class AppleMusicAPITest extends TestCase
                 'POST',
                 'me/library/playlists',
                 ['Content-Type' => 'application/json'],
-                '{"attributes":{"name":"unit.test","description":"description"},"relationships":{"tracks":{"data":[{"id":"5","type":"songs"},{"id":"3","type":"songs"}]}}}'
+                '{"attributes":{"name":"unit.test","description":"description","isPublic":false},"relationships":{"tracks":{"data":[{"id":"5","type":"songs"},{"id":"3","type":"songs"}]}}}'
             )
             ->willReturn('OK');
 
