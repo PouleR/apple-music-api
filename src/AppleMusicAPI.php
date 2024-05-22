@@ -508,6 +508,7 @@ class AppleMusicAPI
         $requestBody['attributes'] = [
             'name' => $playlist->getName(),
             'description' => $playlist->getDescription(),
+            'isPublic' => $playlist->isPublic(),
         ];
 
         foreach ($playlist->getTracks() as $track) {

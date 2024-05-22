@@ -20,6 +20,11 @@ class LibraryPlaylistCreationRequest
     protected $description = '';
 
     /**
+     * @var bool
+     */
+    protected $isPublic = false;
+
+    /**
      * @var LibraryResource[]
      */
     protected $tracks = [];
@@ -62,6 +67,22 @@ class LibraryPlaylistCreationRequest
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    /**
+     * @param bool $isPublic
+     */
+    public function setIsPublic(bool $isPublic): void
+    {
+        $this->isPublic = $isPublic;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublic(): bool
+    {
+        return $this->isPublic;
     }
 
     /**
