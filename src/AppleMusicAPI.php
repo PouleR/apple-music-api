@@ -168,6 +168,27 @@ class AppleMusicAPI
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
+
+    /**
+     * Fetch one or more albums by using their identifiers.
+     * https://developer.apple.com/documentation/applemusicapi/get_multiple_catalog_albums
+     *
+     * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
+     * @param string $albumIds The unique identifiers for the albums. The maximum fetch limit is 100.
+     * @param array  $include A list of additional relationships to include in the fetch.
+     *
+     * @return array|object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getCatalogAlbums(string $storefront, string $albumIds, array $include = [])
+    {
+        $requestUrl = sprintf('catalog/%s/albums', $storefront);
+
+        $requestUrl .= '?' . urldecode(http_build_query(['ids' => $albumIds, 'include' => implode(',', $include)]));
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
     
     /**
      * Fetch albums by a UPC.
@@ -211,6 +232,27 @@ class AppleMusicAPI
         if (count($include)) {
             $requestUrl .= sprintf('?include=%s', implode(',', $include));
         }
+
+        return $this->client->apiRequest('GET', $requestUrl);
+    }
+
+    /**
+     * Fetch one or more songs by using their identifiers.
+     * https://developer.apple.com/documentation/applemusicapi/get_multiple_catalog_songs_by_id
+     *
+     * @param string $storefront An iTunes Store territory, specified by an ISO 3166 alpha-2 country code.
+     * @param string $songIds The unique identifiers for the songs. The maximum fetch limit is 300.
+     * @param array  $include A list of additional relationships to include in the fetch.
+     *
+     * @return array|object
+     *
+     * @throws AppleMusicAPIException
+     */
+    public function getCatalogSongs(string $storefront, string $songIds, array $include = [])
+    {
+        $requestUrl = sprintf('catalog/%s/songs', $storefront);
+
+        $requestUrl .= '?' . urldecode(http_build_query(['ids' => $songIds, 'include' => implode(',', $include)]));
 
         return $this->client->apiRequest('GET', $requestUrl);
     }
