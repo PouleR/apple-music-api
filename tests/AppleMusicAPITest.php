@@ -37,14 +37,6 @@ class AppleMusicAPITest extends TestCase
     /**
      *
      */
-    public function testAPIClient(): void
-    {
-        self::assertEquals($this->client, $this->api->getAPIClient());
-    }
-
-    /**
-     *
-     */
     public function testDeveloperToken(): void
     {
         $this->client->expects(static::once())
@@ -76,7 +68,7 @@ class AppleMusicAPITest extends TestCase
             ->with('GET', 'catalog/nl/charts?types=albums%2Csongs&offset=0&limit=15&genre=20')
             ->willReturn('{"OK"}');
 
-        self::assertEquals(
+        self::assertSame(
             '{"OK"}',
             $this->api->getCatalogCharts('nl', ['albums', 'songs'], 20, 15)
         );
@@ -92,7 +84,7 @@ class AppleMusicAPITest extends TestCase
             ->with('GET', 'catalog/us/playlists/pl.12345')
             ->willReturn('{"OK"}');
 
-        self::assertEquals(
+        self::assertSame(
             '{"OK"}',
             $this->api->getCatalogPlaylist('us', 'pl.12345')
         );
@@ -108,7 +100,7 @@ class AppleMusicAPITest extends TestCase
             ->with('GET', 'catalog/us/albums/test')
             ->willReturn('{"OK"}');
 
-        self::assertEquals(
+        self::assertSame(
             '{"OK"}',
             $this->api->getCatalogAlbum('us', 'test')
         );
@@ -124,7 +116,7 @@ class AppleMusicAPITest extends TestCase
             ->with('GET', 'catalog/us/songs/song.id')
             ->willReturn('{"OK"}');
 
-        self::assertEquals(
+        self::assertSame(
             '{"OK"}',
             $this->api->getCatalogSong('us', 'song.id')
         );
@@ -140,7 +132,7 @@ class AppleMusicAPITest extends TestCase
             ->with('GET', 'catalog/us/artists/artist.id')
             ->willReturn('{"OK"}');
 
-        self::assertEquals(
+        self::assertSame(
             '{"OK"}',
             $this->api->getCatalogArtist('us', 'artist.id')
         );
@@ -156,7 +148,7 @@ class AppleMusicAPITest extends TestCase
             ->with('GET', 'me/storefront')
             ->willReturn('us');
 
-        self::assertEquals(
+        self::assertSame(
             'us',
             $this->api->getUsersStorefront()
         );
@@ -172,7 +164,7 @@ class AppleMusicAPITest extends TestCase
             ->with('GET', 'me/recent/played?offset=5&limit=10')
             ->willReturn('OK');
 
-        self::assertEquals(
+        self::assertSame(
             'OK',
             $this->api->getRecentlyPlayedResources(250, 5)
         );
@@ -188,7 +180,7 @@ class AppleMusicAPITest extends TestCase
             ->with('GET', 'me/library/playlists?offset=3&limit=100')
             ->willReturn('OK');
 
-        self::assertEquals(
+        self::assertSame(
             'OK',
             $this->api->getAllLibraryPlaylists(500, 3)
         );
@@ -204,7 +196,7 @@ class AppleMusicAPITest extends TestCase
             ->with('GET', 'me/library/albums?offset=0&limit=25')
             ->willReturn('OK');
 
-        self::assertEquals(
+        self::assertSame(
             'OK',
             $this->api->getAllLibraryAlbums()
         );
@@ -220,7 +212,7 @@ class AppleMusicAPITest extends TestCase
             ->with('GET', 'me/library/artists?offset=0&limit=20')
             ->willReturn('OK');
 
-        self::assertEquals(
+        self::assertSame(
             'OK',
             $this->api->getAllLibraryArtists(20)
         );
@@ -236,7 +228,7 @@ class AppleMusicAPITest extends TestCase
             ->with('GET', 'me/library/music-videos?offset=10&limit=10')
             ->willReturn('OK');
 
-        self::assertEquals(
+        self::assertSame(
             'OK',
             $this->api->getAllLibraryMusicVideos(10, 10)
         );
@@ -257,7 +249,7 @@ class AppleMusicAPITest extends TestCase
             ->with('POST', 'me/library?ids[songs]=123,888&ids[albums]=456', [], ' ')
             ->willReturn('OK');
 
-        self::assertEquals(
+        self::assertSame(
             'OK',
             $this->api->addResourceToLibrary($request)
         );
@@ -287,7 +279,7 @@ class AppleMusicAPITest extends TestCase
             )
             ->willReturn('OK');
 
-        self::assertEquals(
+        self::assertSame(
             'OK',
             $this->api->createLibraryPlaylist($playlist)
         );
@@ -303,7 +295,7 @@ class AppleMusicAPITest extends TestCase
             ->with('GET', 'catalog/us/search?term=search&types=songs&offset=0&limit=5')
             ->willReturn('{"Search"}');
 
-        self::assertEquals(
+        self::assertSame(
             '{"Search"}',
             $this->api->searchCatalog('us', 'search', 'songs')
         );

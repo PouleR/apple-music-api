@@ -28,7 +28,7 @@ class APIClientTest extends TestCase
 
         $requestOptions = $mockResponse->getRequestOptions();
         self::assertContains('Authorization: Bearer dev.token', $requestOptions['headers']);
-        self::assertEquals('12345', $response->id);
+        self::assertSame('12345', $response->id);
     }
 
     /**
@@ -47,7 +47,7 @@ class APIClientTest extends TestCase
 
         self::assertContains('Authorization: Bearer dev.token', $requestOptions['headers']);
         self::assertContains('Music-User-Token: user.token', $requestOptions['headers']);
-        self::assertEquals('UserToken', $response->title);
+        self::assertSame('UserToken', $response->title);
     }
 
     /**
@@ -78,9 +78,9 @@ class APIClientTest extends TestCase
     {
         $httpClient = new MockHttpClient();
         $apiClient = new APIClient($httpClient);
-        self::assertEquals(APIClient::RETURN_AS_OBJECT, $apiClient->getResponseType());
+        self::assertSame(APIClient::RETURN_AS_OBJECT, $apiClient->getResponseType());
 
         $apiClient->setResponseType(APIClient::RETURN_AS_ASSOC);
-        self::assertEquals(APIClient::RETURN_AS_ASSOC, $apiClient->getResponseType());
+        self::assertSame(APIClient::RETURN_AS_ASSOC, $apiClient->getResponseType());
     }
 }
