@@ -6,7 +6,7 @@
 This is a PHP wrapper for the [Apple Music API](https://developer.apple.com/documentation/applemusicapi).
 
 ## Requirements
-* PHP 8.1 or later.
+* PHP 8.3 or later.
 * Symfony HTTP Client
 
 ## Installation
